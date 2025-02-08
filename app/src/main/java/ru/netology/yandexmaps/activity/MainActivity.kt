@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main){
     private lateinit var map: Map
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
+        MapKitFactory.setApiKey("MAPKIT_API_KEY")
         super.onCreate(savedInstanceState)
         MapKitFactory.initialize(this) // Инициализация библиотеки для загрузки необходимых нативных библиотек.
 
