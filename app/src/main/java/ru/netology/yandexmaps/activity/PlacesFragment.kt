@@ -40,6 +40,7 @@ class PlacesFragment : Fragment() {
                 )
             }
 
+
             override fun onDelete(place: Place) {
                 viewModel.deletePlaceById(place.id)
             }
