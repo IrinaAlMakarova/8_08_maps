@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.maps.MapFragment
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.yandexmaps.R
 import ru.netology.yandexmaps.adapter.OnInteractionListener
