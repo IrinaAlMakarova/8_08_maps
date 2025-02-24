@@ -13,7 +13,7 @@
             android:id="@+id/action_placesFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
     </fragment>
-    <activity
+    <fragment
         android:id="@+id/mapFragment"
         android:name="ru.netology.yandexmaps.activity.MapFragment"
         android:label="MapFragment"

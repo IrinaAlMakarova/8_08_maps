@@ -1,5 +1,6 @@
 package ru.netology.yandexmaps.activity
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +49,12 @@ class PlacesFragment : Fragment() {
                 //TODO
             }
         })
+
+        // New Plase
+        binding.addPlace.setOnClickListener {
+            findNavController().navigate(R.id.action_placesFragment_to_mapFragment)
+        }
+        // New Plase
 
         binding.list.adapter = adapter
 
