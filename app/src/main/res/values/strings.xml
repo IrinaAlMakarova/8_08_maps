@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">YandexMaps</string>
+    <string name="name_place">Введите название точки</string>
 </resources>

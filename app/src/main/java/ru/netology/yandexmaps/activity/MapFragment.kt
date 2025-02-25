@@ -8,14 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
+import com.yandex.mapkit.map.InputListener
+import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.mapview.MapView
+import ru.netology.yandexmaps.BuildConfig
+import ru.netology.yandexmaps.R
 import ru.netology.yandexmaps.databinding.MapFragmentBinding
 
 class MapFragment : Fragment() {
+
     companion object {
         private const val ZOOM_STEP = 0.5F // Шаг смены масштаба
         const val LEN_KEY = "LEN_KEY"
@@ -30,6 +36,7 @@ class MapFragment : Fragment() {
         val binding = MapFragmentBinding.inflate(layoutInflater, container, false)
         val mapView = binding.mapview
         val map = mapView.mapWindow.map
+
 
         viewLifecycleOwner.lifecycle.addObserver(
             object : LifecycleEventObserver {
@@ -65,10 +72,9 @@ class MapFragment : Fragment() {
         }
 
         // добавить точку
-        binding.locatoin.setOnClickListener {
-            //todo
+        binding.back.setOnClickListener {
+            findNavController().navigate(R.id.action_mapFragment_to_placesFragment)
         }
-
 
         // положение или масштаб карты
         map.move(
@@ -82,11 +88,16 @@ class MapFragment : Fragment() {
             null
         )
 
+        // Добавляем точку при нажатии на карту (тап)
+        map.addInputListener(inputListener)
+
+
         return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
         MapKitFactory.initialize(requireContext()) // Инициализация библиотеки для загрузки необходимых нативных библиотек.
     }
 
@@ -104,4 +115,20 @@ class MapFragment : Fragment() {
         MapKitFactory.getInstance().onStop()
         mapView.onStop()
     }
+
+
+    // Добавляем точку при нажатии на карту (тап)
+    val inputListener = object : InputListener {
+        // Handle single tap
+        override fun onMapTap(map: Map, point: Point) {
+        }
+
+        // long tap
+        override fun onMapLongTap(map: Map, point: Point) {
+            Dialog.newInstance(length = point.latitude, width = point.longitude)
+                    .show(childFragmentManager, null)
+        }
+    }
+
+
 }

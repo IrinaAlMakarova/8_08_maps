@@ -31,22 +31,22 @@ class PlacesFragment : Fragment() {
 
         val adapter = PlacesAdapter(onInteractionListener = object : OnInteractionListener {
 
-            override fun onClick(place: Place) {
+            override fun onDelete(place: Place) {
+                viewModel.deletePlaceById(place.id)
+            }
+
+            override fun onEdit(place: Place) {
+                Dialog.newInstance(id = place.id, length = place.length, width = place.width )
+                    .show(childFragmentManager, null)
+            }
+
+            override fun onToPlace(place: Place){
                 findNavController().navigate(
                     R.id.action_placesFragment_to_mapFragment, bundleOf(
                         MapFragment.LEN_KEY to place.length,
                         MapFragment.WID_KEY to place.width
                     )
                 )
-            }
-
-
-            override fun onDelete(place: Place) {
-                viewModel.deletePlaceById(place.id)
-            }
-
-            override fun onEdit(place: Place) {
-                //TODO
             }
         })
 

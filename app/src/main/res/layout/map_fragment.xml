@@ -31,13 +31,13 @@
             app:srcCompat="@android:drawable/btn_minus" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/locatoin"
+            android:id="@+id/back"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_alignTop="@+id/minus"
             android:layout_toLeftOf="@+id/minus"
             android:contentDescription="Add places"
-            app:srcCompat="@drawable/baseline_edit_location_alt_24" />
+            app:srcCompat="@drawable/baseline_arrow_back_24" />
 
     </com.yandex.mapkit.mapview.MapView>
 

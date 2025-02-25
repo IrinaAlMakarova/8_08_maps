@@ -31,6 +31,11 @@ class PlacesViewHolder(
                                 true
                             }
 
+                            R.id.toPlace -> {
+                                onInteractionListener.onToPlace(place)
+                                true
+                            }
+
                             else -> false
                         }
                     }
