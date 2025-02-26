@@ -16,7 +16,6 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.InputListener
 import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.mapview.MapView
-import ru.netology.yandexmaps.BuildConfig
 import ru.netology.yandexmaps.R
 import ru.netology.yandexmaps.databinding.MapFragmentBinding
 
@@ -30,7 +29,6 @@ class MapFragment : Fragment() {
         private const val ZOOM_STEP = 0.5F // Шаг смены масштаба
         const val LENGTH_KEY = "LENGTH_KEY"
         const val WIDTH_KEY = "WIDTH_KEY"
-        private val SMOOTH_ANIMATION = Animation(Animation.Type.SMOOTH, 0.4f)
     }
 
     override fun onCreateView(
@@ -84,16 +82,24 @@ class MapFragment : Fragment() {
         // Переходим к точке на карте при выботе точки из списке или при добавлении точки на карте
         val arguments = arguments
         if (arguments != null && arguments.containsKey(LENGTH_KEY) && arguments.containsKey(WIDTH_KEY)) {
+            val cameraPosition = map.cameraPosition
             map.move(
                 CameraPosition(
                     Point(arguments.getDouble(LENGTH_KEY), arguments.getDouble(WIDTH_KEY)), //точка с координатами
-                    /* zoom = */ 10.0f, //величина необходимого приближения
-                    /* azimuth = */ 0f, //азимут
-                    /* tilt = */ 0f //наклон
+                    /* zoom = */ 17.0f, //величина необходимого приближения
+                    cameraPosition.azimuth, //* azimuth = */ 0f, //азимут
+                    cameraPosition.tilt //* tilt = */ 0f //наклон
                 ),
                 Animation(Animation.Type.SMOOTH, 5f), //плавное перемещение к точке
                 null
             )
+
+            //val placemark = map.mapObjects.addPlacemark().apply {
+            //    geometry = Point(arguments.getDouble(LENGTH_KEY), arguments.getDouble(WIDTH_KEY))
+            //    setIcon(ImageProvider.fromResource(this, R.drawable.ic_place_24))
+            //}
+
+
             arguments.remove(LENGTH_KEY)
             arguments.remove(WIDTH_KEY)
         }else{
@@ -104,7 +110,6 @@ class MapFragment : Fragment() {
             )
         }
 
-
         // Добавляем точку при нажатии на карту (тап)
         map.addInputListener(inputListener)
 
@@ -112,11 +117,11 @@ class MapFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
-        MapKitFactory.initialize(requireContext()) // Инициализация библиотеки для загрузки необходимых нативных библиотек.
-    }
+    //override fun onCreate(savedInstanceState: Bundle?) {
+    //    super.onCreate(savedInstanceState)
+    //    MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
+    //    MapKitFactory.initialize(requireContext()) // Инициализация библиотеки для загрузки необходимых нативных библиотек.
+    //}
 
 
     // Отображаем карты перед моментом, когда активити с картой станет видимой пользователю:
@@ -146,6 +151,7 @@ class MapFragment : Fragment() {
                     .show(childFragmentManager, null)
         }
     }
+
 
 
 }
