@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -15,15 +17,26 @@ import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.InputListener
 import com.yandex.mapkit.map.Map
+import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
+import com.yandex.runtime.ui_view.ViewProvider
+import kotlinx.coroutines.flow.collectLatest
 import ru.netology.yandexmaps.R
 import ru.netology.yandexmaps.databinding.MapFragmentBinding
+import ru.netology.yandexmaps.databinding.PlaceBinding
+import ru.netology.yandexmaps.viewmodel.MapViewModel
 
 
 class MapFragment : Fragment() {
 
     private val START_ANIMATION = Animation(Animation.Type.SMOOTH, 5f)
     private val START_POSITION = CameraPosition(Point(55.753544, 37.621202), 10f, 0f, 0f)
+
+    private val viewModel by viewModels<MapViewModel>()
+    private val placeTapListener = MapObjectTapListener { mapObject, _ ->
+        viewModel.deletePlaceById(mapObject.userData as Long)
+        true
+    }
 
     companion object {
         private const val ZOOM_STEP = 0.5F // Шаг смены масштаба
@@ -94,12 +107,6 @@ class MapFragment : Fragment() {
                 null
             )
 
-            //val placemark = map.mapObjects.addPlacemark().apply {
-            //    geometry = Point(arguments.getDouble(LENGTH_KEY), arguments.getDouble(WIDTH_KEY))
-            //    setIcon(ImageProvider.fromResource(this, R.drawable.ic_place_24))
-            //}
-
-
             arguments.remove(LENGTH_KEY)
             arguments.remove(WIDTH_KEY)
         }else{
@@ -109,6 +116,25 @@ class MapFragment : Fragment() {
                 null
             )
         }
+
+        //  Проставляем метку на карте
+        val collection = map.mapObjects.addCollection()
+        viewLifecycleOwner.lifecycle.coroutineScope.launchWhenStarted {
+            viewModel.places.collectLatest { places ->
+                collection.clear()
+                places.forEach { place ->
+                    val placeBinding = PlaceBinding.inflate(layoutInflater)
+                    placeBinding.title.text = place.name
+                    collection.addPlacemark(
+                        Point(place.length, place.width),
+                        ViewProvider(placeBinding.root)
+                    ).apply {
+                        userData = place.id
+                    }
+                }
+            }
+        }
+        collection.addTapListener(placeTapListener)
 
         // Добавляем точку при нажатии на карту (тап)
         map.addInputListener(inputListener)
