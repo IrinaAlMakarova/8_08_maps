@@ -20,12 +20,17 @@ import ru.netology.yandexmaps.BuildConfig
 import ru.netology.yandexmaps.R
 import ru.netology.yandexmaps.databinding.MapFragmentBinding
 
+
 class MapFragment : Fragment() {
+
+    private val START_ANIMATION = Animation(Animation.Type.SMOOTH, 5f)
+    private val START_POSITION = CameraPosition(Point(55.753544, 37.621202), 10f, 0f, 0f)
 
     companion object {
         private const val ZOOM_STEP = 0.5F // Шаг смены масштаба
-        const val LEN_KEY = "LEN_KEY"
-        const val WID_KEY = "WID_KEY"
+        const val LENGTH_KEY = "LENGTH_KEY"
+        const val WIDTH_KEY = "WIDTH_KEY"
+        private val SMOOTH_ANIMATION = Animation(Animation.Type.SMOOTH, 0.4f)
     }
 
     override fun onCreateView(
@@ -76,17 +81,29 @@ class MapFragment : Fragment() {
             findNavController().navigate(R.id.action_mapFragment_to_placesFragment)
         }
 
-        // положение или масштаб карты
-        map.move(
-            CameraPosition(
-                Point(55.753544, 37.621202), //точка с координатами
-                /* zoom = */ 17.0f, //величина необходимого приближения
-                /* azimuth = */ 0f, //азимут
-                /* tilt = */ 0f //наклон
-            ),
-            Animation(Animation.Type.SMOOTH, 5f), //плавное перемещение к точке
-            null
-        )
+        // Переходим к точке на карте при выботе точки из списке или при добавлении точки на карте
+        val arguments = arguments
+        if (arguments != null && arguments.containsKey(LENGTH_KEY) && arguments.containsKey(WIDTH_KEY)) {
+            map.move(
+                CameraPosition(
+                    Point(arguments.getDouble(LENGTH_KEY), arguments.getDouble(WIDTH_KEY)), //точка с координатами
+                    /* zoom = */ 10.0f, //величина необходимого приближения
+                    /* azimuth = */ 0f, //азимут
+                    /* tilt = */ 0f //наклон
+                ),
+                Animation(Animation.Type.SMOOTH, 5f), //плавное перемещение к точке
+                null
+            )
+            arguments.remove(LENGTH_KEY)
+            arguments.remove(WIDTH_KEY)
+        }else{
+            map.move(
+                START_POSITION,
+                START_ANIMATION,
+                null
+            )
+        }
+
 
         // Добавляем точку при нажатии на карту (тап)
         map.addInputListener(inputListener)

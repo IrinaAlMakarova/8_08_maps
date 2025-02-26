@@ -43,8 +43,8 @@ class PlacesFragment : Fragment() {
             override fun onToPlace(place: Place){
                 findNavController().navigate(
                     R.id.action_placesFragment_to_mapFragment, bundleOf(
-                        MapFragment.LEN_KEY to place.length,
-                        MapFragment.WID_KEY to place.width
+                        MapFragment.LENGTH_KEY to place.length,
+                        MapFragment.WIDTH_KEY to place.width
                     )
                 )
             }
