@@ -20,6 +20,9 @@
         tools:layout="@layout/map_fragment">
         <action
             android:id="@+id/action_mapFragment_to_placesFragment"
-            app:destination="@id/placesFragment" />
+
+            app:popUpTo="@id/placesFragment" />
+        <!-- app:destination="@id/placesFragment" /> -->
     </fragment>
+
 </navigation>

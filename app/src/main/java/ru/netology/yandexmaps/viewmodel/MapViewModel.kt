@@ -22,16 +22,9 @@ class MapViewModel(context: Application) : AndroidViewModel(context) {
         }
     }
 
-
     fun deletePlaceById(id: Long) {
         viewModelScope.launch {
             dao.deleteById(id)
-        }
-    }
-
-    fun updateById(id: Long, length: Double, width: Double){
-        viewModelScope.launch {
-            dao.updateById(id, length, width)
         }
     }
 

@@ -14,7 +14,7 @@ import ru.netology.yandexmaps.viewmodel.MapViewModel
 
 class Dialog : DialogFragment() {
 
-    companion object{
+    companion object {
         private const val ID_KEY = "ID_KEY"
         private const val LENGTH_KEY = "LENGTH_KEY"
         private const val WIDTH_KEY = "WIDTH_KEY"
@@ -36,7 +36,8 @@ class Dialog : DialogFragment() {
                     return@setPositiveButton
                 }
                 viewModel.insertPlace(
-                    Place(id =  requireArguments().getLong(ID_KEY),
+                    Place(
+                        id = requireArguments().getLong(ID_KEY),
                         name = text,
                         length = requireArguments().getDouble(LENGTH_KEY),
                         width = requireArguments().getDouble(WIDTH_KEY)

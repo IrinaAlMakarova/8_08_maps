@@ -29,19 +29,32 @@ import ru.netology.yandexmaps.viewmodel.MapViewModel
 
 class MapFragment : Fragment() {
 
-    private val START_ANIMATION = Animation(Animation.Type.SMOOTH, 5f)
-    private val START_POSITION = CameraPosition(Point(55.753544, 37.621202), 10f, 0f, 0f)
-
     private val viewModel by viewModels<MapViewModel>()
     private val placeTapListener = MapObjectTapListener { mapObject, _ ->
         viewModel.deletePlaceById(mapObject.userData as Long)
         true
     }
 
+    // Добавляем точку при нажатии на карту (тап)
+    private val inputListener = object : InputListener {
+        // Handle single tap
+        override fun onMapTap(map: Map, point: Point) {
+        }
+
+        // long tap
+        override fun onMapLongTap(map: Map, point: Point) {
+            Dialog.newInstance(length = point.latitude, width = point.longitude)
+                .show(childFragmentManager, null)
+        }
+    }
+
     companion object {
         private const val ZOOM_STEP = 0.5F // Шаг смены масштаба
         const val LENGTH_KEY = "LENGTH_KEY"
         const val WIDTH_KEY = "WIDTH_KEY"
+        private val start_animation = Animation(Animation.Type.SMOOTH, 5f)
+        private val start_position = CameraPosition(Point(55.753544, 37.621202), 10f, 0f, 0f)
+
     }
 
     override fun onCreateView(
@@ -52,7 +65,6 @@ class MapFragment : Fragment() {
         val binding = MapFragmentBinding.inflate(layoutInflater, container, false)
         val mapView = binding.mapview
         val map = mapView.mapWindow.map
-
 
         viewLifecycleOwner.lifecycle.addObserver(
             object : LifecycleEventObserver {
@@ -94,11 +106,17 @@ class MapFragment : Fragment() {
 
         // Переходим к точке на карте при выботе точки из списке или при добавлении точки на карте
         val arguments = arguments
-        if (arguments != null && arguments.containsKey(LENGTH_KEY) && arguments.containsKey(WIDTH_KEY)) {
+        if (arguments != null && arguments.containsKey(LENGTH_KEY) && arguments.containsKey(
+                WIDTH_KEY
+            )
+        ) {
             val cameraPosition = map.cameraPosition
             map.move(
                 CameraPosition(
-                    Point(arguments.getDouble(LENGTH_KEY), arguments.getDouble(WIDTH_KEY)), //точка с координатами
+                    Point(
+                        arguments.getDouble(LENGTH_KEY),
+                        arguments.getDouble(WIDTH_KEY)
+                    ), //точка с координатами
                     /* zoom = */ 17.0f, //величина необходимого приближения
                     cameraPosition.azimuth, //* azimuth = */ 0f, //азимут
                     cameraPosition.tilt //* tilt = */ 0f //наклон
@@ -109,10 +127,10 @@ class MapFragment : Fragment() {
 
             arguments.remove(LENGTH_KEY)
             arguments.remove(WIDTH_KEY)
-        }else{
+        } else {
             map.move(
-                START_POSITION,
-                START_ANIMATION,
+                start_position,
+                start_animation,
                 null
             )
         }
@@ -139,7 +157,6 @@ class MapFragment : Fragment() {
         // Добавляем точку при нажатии на карту (тап)
         map.addInputListener(inputListener)
 
-
         return binding.root
     }
 
@@ -148,7 +165,6 @@ class MapFragment : Fragment() {
     //    MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
     //    MapKitFactory.initialize(requireContext()) // Инициализация библиотеки для загрузки необходимых нативных библиотек.
     //}
-
 
     // Отображаем карты перед моментом, когда активити с картой станет видимой пользователю:
     private fun startMap(mapView: MapView) {
@@ -163,21 +179,5 @@ class MapFragment : Fragment() {
         MapKitFactory.getInstance().onStop()
         mapView.onStop()
     }
-
-
-    // Добавляем точку при нажатии на карту (тап)
-    val inputListener = object : InputListener {
-        // Handle single tap
-        override fun onMapTap(map: Map, point: Point) {
-        }
-
-        // long tap
-        override fun onMapLongTap(map: Map, point: Point) {
-            Dialog.newInstance(length = point.latitude, width = point.longitude)
-                    .show(childFragmentManager, null)
-        }
-    }
-
-
 
 }

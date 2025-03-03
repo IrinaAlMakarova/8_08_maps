@@ -1,6 +1,5 @@
 package ru.netology.yandexmaps.activity
 
-import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,11 +35,11 @@ class PlacesFragment : Fragment() {
             }
 
             override fun onEdit(place: Place) {
-                Dialog.newInstance(id = place.id, length = place.length, width = place.width )
+                Dialog.newInstance(id = place.id, length = place.length, width = place.width)
                     .show(childFragmentManager, null)
             }
 
-            override fun onToPlace(place: Place){
+            override fun onToPlace(place: Place) {
                 findNavController().navigate(
                     R.id.action_placesFragment_to_mapFragment, bundleOf(
                         MapFragment.LENGTH_KEY to place.length,
