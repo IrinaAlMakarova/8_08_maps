@@ -43,7 +43,8 @@ class Dialog : DialogFragment() {
                         width = requireArguments().getDouble(WIDTH_KEY)
                     )
                 )
-                findNavController().navigate(R.id.action_mapFragment_to_placesFragment)
+                //findNavController().navigate(R.id.action_mapFragment_to_placesFragment)
+                dismiss() // Закрыть диалог
             }.create()
     }
 }

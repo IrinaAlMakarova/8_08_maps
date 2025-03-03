@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import ru.netology.yandexmaps.databinding.CardPlaceSingleBinding
-import ru.netology.yandexmaps.databinding.PlacesFragmentBinding
 import ru.netology.yandexmaps.dto.Place
 import ru.netology.yandexmaps.holder.PlacesViewHolder
 

@@ -15,7 +15,6 @@ class PlacesViewHolder(
         binding.apply {
             title.text = place.name
 
-
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.place_menu)

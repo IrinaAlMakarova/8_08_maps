@@ -2,7 +2,6 @@ package ru.netology.yandexmaps.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.yandex.mapkit.MapKitFactory
 import ru.netology.yandexmaps.BuildConfig
 import ru.netology.yandexmaps.R
